@@ -186,3 +186,97 @@ def shortest_path(graph, source, dest):
 
 shortest = shortest_path(graph, 'w', 'c')
 print(f"Shortest path: {shortest}")
+
+"""
+Problem nº 5:
+"""
+grid = [
+  ['W', 'L', 'W', 'W', 'W'],
+  ['W', 'L', 'W', 'W', 'W'],
+  ['W', 'W', 'W', 'L', 'W'],
+  ['W', 'W', 'L', 'L', 'W'],
+  ['L', 'W', 'W', 'L', 'L'],
+  ['L', 'L', 'W', 'W', 'W'],
+]
+def island_count(grid):
+    rows = len(grid)
+    cols = len(grid[0])
+    visited = set()
+    count = 0
+
+    for i in range(rows):
+        for j in range(cols):
+            if explore(grid, i, j, visited):
+                count += 1
+
+    return count
+
+def explore(grid, row, col, visited):    
+    if (row, col) in visited:
+        return False
+    
+    visited.add((row, col))
+
+    row_in_bounds = row >= 0 and row < len(grid)
+    col_in_bounds = col >= 0 and col < len(grid[0])
+    
+    if not row_in_bounds or not col_in_bounds:
+        return False
+    
+    if grid[row][col] == 'W':
+        return False
+    
+    explore(grid, row+1, col, visited)
+    explore(grid, row-1, col, visited)
+    explore(grid, row, col+1, visited)
+    explore(grid, row, col-1, visited)
+
+    return True
+
+island_num = island_count(grid)
+print(f"Number os islands: {island_num}")
+
+"""
+Problem nº 6:
+"""
+grid = [
+  ['W', 'L', 'W', 'W', 'W'],
+  ['W', 'L', 'W', 'W', 'W'],
+  ['W', 'W', 'W', 'L', 'W'],
+  ['W', 'W', 'L', 'L', 'W'],
+  ['L', 'W', 'W', 'L', 'L'],
+  ['L', 'L', 'W', 'W', 'W'],
+]
+def slowest_island(grid):
+    rows = len(grid)
+    cols = len(grid[0])
+    visited = set()
+    smallest_item = 100000
+
+    for i in range(rows):
+        for j in range(cols):
+            land_count = explore(grid, i, j, visited)
+            if land_count < smallest_item and land_count:
+                smallest_item = land_count
+
+    return smallest_item
+
+def explore(grid, row, col, visited):    
+    if (row, col) in visited:
+        return 0
+    
+    visited.add((row, col))
+
+    row_in_bounds = row >= 0 and row < len(grid)
+    col_in_bounds = col >= 0 and col < len(grid[0])
+    
+    if not row_in_bounds or not col_in_bounds:
+        return 0
+    
+    if grid[row][col] == 'W':
+        return 0
+    
+    return explore(grid, row+1, col, visited) + explore(grid, row-1, col, visited) + explore(grid, row, col+1, visited) + explore(grid, row, col-1, visited) + 1
+
+slowest = slowest_island(grid)
+print(f"Slowest island: {slowest}")
