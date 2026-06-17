@@ -54,3 +54,94 @@ def how_sum(target_value, nums, memo):
 print(f"How sum: {how_sum(7, [5,3,4,7], {})}")
 print(f"How sum: {how_sum(8, [2], {})}")
 print(f"How sum: {how_sum(300, [7,14], {})}")
+
+def best_sum(target_value, nums, memo):
+  if target_value in memo: return memo[target_value]
+  if target_value == 0: return []
+  if target_value < 0: return None
+
+  shortest_combination = None
+
+  for num in nums:
+    remainder = target_value - num
+    remainder_result = best_sum(remainder, nums, memo)
+    if remainder_result != None:
+      combination = remainder_result + [num]
+      if not shortest_combination or len(combination) < len(shortest_combination):
+        shortest_combination = combination
+
+  memo[target_value] = shortest_combination
+  return memo[target_value]
+
+print(f"Best sum: {best_sum(7, [5,3,4,7], {})}")
+print(f"Best sum: {best_sum(300, [7,14], {})}")
+
+def can_construct(target: str, word_bank, memo):
+  if target in memo: 
+    return memo[target]
+  if target == '': 
+    return True
+
+  for word in word_bank:
+    remainder = target.removeprefix(word)
+    if remainder == target: 
+      continue
+    if can_construct(remainder, word_bank, memo):
+      memo[target] = True
+      return True
+    
+  memo[target] = False
+  return False
+
+print(f"Can Construct? {can_construct('abcdef', ['ab', 'abc', 'cd', 'def', 'abcd'], {})}")
+print(f"Can Construct? {can_construct('skateboard', ['bo', 'rd', 'ate', 't', 'ska', 'sk', 'boar'], {})}")
+print(f"Can Construct? {can_construct('enterapotentpot', ['a', 'p', 'ent', 'enter', 'ot', 'o', 't'], {})}")
+print(f"Can Construct? {can_construct('eeeeeeeeeeeeeeeeeeeeeeeeeeef', ['e', 'eeeee', 'eeeeeeeeeeee'], {})}")
+
+def count_construct(target: str, word_bank, memo):
+  if target in memo:
+    return memo[target]
+  if target == '':
+    return 1
+  
+  count = 0
+  for word in word_bank:
+    remainder = target.removeprefix(word)
+    if target == remainder:
+      continue
+    count += count_construct(remainder, word_bank, memo)
+
+  memo[target] = count
+  return count
+  
+print(f"Count Construct: {count_construct('abcdef', ['ab', 'abc', 'cd', 'def', 'abcd'], {})}")
+print(f"Count Construct: {count_construct('skateboard', ['bo', 'rd', 'ate', 't', 'ska', 'sk', 'boar'], {})}")
+print(f"Count Construct: {count_construct('purple', ['purp', 'p', 'ur', 'le', 'purpl'], {})}")
+print(f"Count Construct: {count_construct('eeeeeeeeeeeeeeeeeeeeeeeeeeef', ['e', 'eeeee', 'eeeeeeeeeeee'], {})}")
+print(f"Count Construct: {count_construct('aaaa', ['a', 'aa'], {})}")
+
+def all_construct(target: str, word_bank, memo):
+  if target in memo:
+    return memo[target]
+  if target == '':
+    return [[]]
+  
+  res = []
+
+  for word in word_bank:
+    remainder = target.removeprefix(word)
+    if target == remainder:
+      continue
+    
+    remainder_result = all_construct(remainder, word_bank, memo)
+    if remainder_result != None:
+      new = [item + [word] for item in remainder_result]
+      res = res + new
+  
+  memo[target] = res if len(res) else None
+  return memo[target]
+
+print(f"All Construct: {all_construct('abcdef', ['ab', 'abc', 'cd', 'def', 'abcd'], {})}")
+print(f"All Construct: {all_construct('skateboard', ['bo', 'rd', 'ate', 't', 'ska', 'sk', 'boar'], {})}")
+print(f"All Construct: {all_construct('purple', ['purp', 'p', 'ur', 'le', 'purpl'], {})}")
+print(f"All Construct: {all_construct('eeeeeeeeeeeeeeeeeeeeeeeeeeef', ['e', 'eeeee', 'eeeeeeeeeeee'], {})}")
