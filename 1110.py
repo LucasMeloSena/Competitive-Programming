@@ -17,22 +17,22 @@ while True:
     break
   
   cards = []
-  discardedCards = []
-  remainingCard = 0
+  discarded_cards = []
+  remaining_card = 0
   
   for i in range(1,num+1):
     cards.append(i)
   
   while len(cards):
     if len(cards) == 1:
-      remainingCard = cards[0]
+      remaining_card = cards[0]
       break
     
-    discardedCard = cards.pop(0)
-    discardedCards.append(str(discardedCard))
+    discarded_card = cards.pop(0)
+    discarded_cards.append(str(discarded_card))
     
-    topCard = cards.pop(0)
-    cards.append(topCard)
+    top_card = cards.pop(0)
+    cards.append(top_card)
   
-  print(f"Discarded cards: {', '.join(discardedCards)}")
-  print(f"Remaining card: {remainingCard}")
+  print(f"Discarded cards: {', '.join(discarded_cards)}")
+  print(f"Remaining card: {remaining_card}")
