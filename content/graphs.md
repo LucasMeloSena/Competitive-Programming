@@ -12,5 +12,3 @@ Algoritmos:
 - <b>Usa queue</b> <br>
 
 Tanto para BFS quanto para DFS, não é necessário visitar grafos que já foram visitados (estratégia de otimização)
-
-### Grafos em Matrizes:

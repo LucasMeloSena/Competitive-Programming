@@ -129,19 +129,18 @@ def all_construct(target: str, word_bank, memo):
   res = []
 
   for word in word_bank:
-    remainder = target.removeprefix(word)
-    if target == remainder:
-      continue
-    
-    remainder_result = all_construct(remainder, word_bank, memo)
-    if remainder_result != None:
-      new = [item + [word] for item in remainder_result]
-      res = res + new
+    if target.startswith(word):
+      remainder = target.removeprefix(word)
+      remainder_result = all_construct(remainder, word_bank, memo)
+      if remainder_result:
+        new = [item + [word] for item in remainder_result]
+        res.extend(new)
   
-  memo[target] = res if len(res) else None
+  memo[target] = res
   return memo[target]
 
-print(f"All Construct: {all_construct('abcdef', ['ab', 'abc', 'cd', 'def', 'abcd'], {})}")
+print(f"All Construct: {all_construct('abcdef', ['ab', 'abc', 'cd', 'def', 'abcd', 'ef', 'c'], {})}")
 print(f"All Construct: {all_construct('skateboard', ['bo', 'rd', 'ate', 't', 'ska', 'sk', 'boar'], {})}")
 print(f"All Construct: {all_construct('purple', ['purp', 'p', 'ur', 'le', 'purpl'], {})}")
 print(f"All Construct: {all_construct('eeeeeeeeeeeeeeeeeeeeeeeeeeef', ['e', 'eeeee', 'eeeeeeeeeeee'], {})}")
+print(f"All Construct: {all_construct('aaaa', ['a', 'aa'], {})}")
