@@ -93,4 +93,67 @@ def best_sum(target_value, nums):
 print(f"Best sum: {best_sum(7, [5,3,4,7])}")
 print(f"Best sum: {best_sum(8, [2,3,5])}")
 print(f"Best sum: {best_sum(8, [1,4,5])}")
-print(f"Best sum: {best_sum(100, [1,2,5,25])}")
+print(f"Best sum: {best_sum(100, [1,2,5,25])}\n")
+
+def can_construct(target, word_bank):
+  size = len(target)
+  arr = [False for _ in range(size + 1)]
+  arr[0] = True # Empty string is always possible
+
+  for index, _ in enumerate(arr):
+    if arr[index]:
+      for word in word_bank:
+        final = index + len(word)
+        substring = target[index:final]
+        if substring == word and final < len(arr):
+          arr[final] = True
+
+  return arr[size]
+
+print(f"Can construct? {can_construct("abcdef", ['ab', 'abc', 'cd', 'def'])}")
+print(f"Can Construct? {can_construct('skateboard', ['bo', 'rd', 'ate', 't', 'ska', 'sk', 'boar'])}")
+print(f"Can Construct? {can_construct('enterapotentpot', ['a', 'p', 'ent', 'enter', 'ot', 'o', 't'])}")
+print(f"Can Construct? {can_construct('eeeeeeeeeeeeeeeeeeeeeeeeeeef', ['e', 'eeeee', 'eeeeeeeeeeee'])}")
+
+def count_construct(target, word_bank):
+  size = len(target)
+  arr = [0 for _ in range(size+1)]
+  arr[0] = 1
+
+  for index, _ in enumerate(arr):
+    for word in word_bank:
+      if arr[index]:
+        final = index + len(word)
+        substring = target[index:final]
+        if substring == word and final < len(arr):
+          arr[final] += arr[index]
+
+  return arr[size]
+
+print(f"Count Construct: {count_construct('abcdef', ['ab', 'abc', 'cd', 'def', 'abcd'])}")
+print(f"Count Construct: {count_construct('skateboard', ['bo', 'rd', 'ate', 't', 'ska', 'sk', 'boar'])}")
+print(f"Count Construct: {count_construct('purple', ['purp', 'p', 'ur', 'le', 'purpl'])}")
+print(f"Count Construct: {count_construct('eeeeeeeeeeeeeeeeeeeeeeeeeeef', ['e', 'eeeee', 'eeeeeeeeeeee'])}")
+print(f"Count Construct: {count_construct('aaaa', ['a', 'aa'])}\n")
+
+def all_construct(target, word_bank):
+  size = len(target)
+  arr = [[] for _ in range(size+1)]
+  arr[0] = [[]]
+  
+  for index, _ in enumerate(arr):
+    if arr[index]:
+      for word in word_bank:
+        final = index + len(word)
+        substring = target[index:final]
+        if substring == word and final < len(arr):
+          combinations = map(lambda x: x + [word], arr[index])
+          arr[final] = arr[final] + (list(combinations))
+
+  return arr[size]
+
+print(f"All Construct: {all_construct('abcdef', ['ab', 'abc', 'cd', 'def', 'abcd', 'ef', 'c'])}")
+print(f"All Construct: {all_construct('skateboard', ['bo', 'rd', 'ate', 't', 'ska', 'sk', 'boar'])}")
+print(f"All Construct: {all_construct('purple', ['purp', 'p', 'ur', 'le', 'purpl'])}")
+print(f"All Construct: {all_construct('eeeeeeeeeeeeeeeeeeeeeeeeeeef', ['e', 'eeeee', 'eeeeeeeeeeee'])}")
+print(f"All Construct: {all_construct('aaaa', ['a', 'aa'])}")
