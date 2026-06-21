@@ -3,43 +3,6 @@ from collections import deque
 """
 Problem nº 1:
 """
-def hasPathDFS(graph, source, dest, visited = None):
-    if source == dest:
-        return True
-      
-    if visited is None:
-      visited = set()
-      
-    if source in visited:
-      return False
-      
-    visited.add(source)
-
-    for neighbor in graph[source]:
-        if hasPathDFS(graph, neighbor, dest, visited) == True:
-            return True
-    return False
-
-
-def hasPathBFS(graph, source, dest):
-    if source == dest:
-        return True
-    
-    visited = set([source])
-    queue = deque([source])
-
-    while len(queue) > 0:
-        current = graph[queue.popleft()]
-        for neighbor in current:
-          if neighbor not in visited:
-              visited.add(neighbor)
-              if neighbor == dest:
-                  return True
-              queue.append(neighbor)
-
-    return False
-
-
 # Repeated nodes
 graph = {
     "a": ["b", "c"],
@@ -60,15 +23,61 @@ graph = {
     "f": [],
 }
 
+def hasPathDFS(graph, source, dest, visited = None):
+    if source == dest:
+        return True
+      
+    if visited is None:
+      visited = set()
+      
+    if source in visited:
+      return False
+      
+    visited.add(source)
+
+    for neighbor in graph[source]:
+        if hasPathDFS(graph, neighbor, dest, visited) == True:
+            return True
+    return False
+
+def hasPathBFS(graph, source, dest):
+    if source == dest:
+        return True
+    
+    visited = set([source])
+    queue = deque([source])
+
+    while len(queue) > 0:
+        current = graph[queue.popleft()]
+        for neighbor in current:
+          if neighbor not in visited:
+              visited.add(neighbor)
+              if neighbor == dest:
+                  return True
+              queue.append(neighbor)
+
+    return False
+
 dfs = hasPathDFS(graph, "a", "f")
 print(f"Has path DFS? {dfs}")
 
 bfs = hasPathBFS(graph, "a", "f")
-print(f"Has path BFS? {bfs}")
+print(f"Has path BFS? {bfs}\n")
 
 """
 Problem nº 2:
 """
+graph = {
+    '3': [],
+    '4': ['6'],
+    '6': ['4', '5', '7', '8'],
+    '8': ['6'],
+    '7': ['6'],
+    '5': ['6'],
+    '1': ['2'],
+    '2': ['1']
+}
+
 def connected_components_count(graph):
     count = 0
     visited = set()
@@ -88,23 +97,22 @@ def explore(graph, current, visited):
     
     return True
 
-graph = {
-    '3': [],
-    '4': ['6'],
-    '6': ['4', '5', '7', '8'],
-    '8': ['6'],
-    '7': ['6'],
-    '5': ['6'],
-    '1': ['2'],
-    '2': ['1']
-}
-
 count = connected_components_count(graph)
-print(f"Connected components count: {count}")
+print(f"Connected components count: {count}\n")
 
 """
 Problem nº 3:
 """
+graph = {
+    '0': ['8', '1', '5'],
+    '1': ['0'],
+    '5': ['0', '8'],
+    '8': ['0', '5'],
+    '2': ['3', '4'],
+    '3': ['2', '4'],
+    '4': ['3', '2']
+}
+
 def largest_component(graph):
     largest = 0
     visited = set()
@@ -127,65 +135,48 @@ def explore(graph, current, visited):
         
     return size
 
-graph = {
-    '0': ['8', '1', '5'],
-    '1': ['0'],
-    '5': ['0', '8'],
-    '8': ['0', '5'],
-    '2': ['3', '4'],
-    '3': ['2', '4'],
-    '4': ['3', '2']
-}
-
 largest = largest_component(graph)
-print(f"Largest component: {largest}")
+print(f"Largest component: {largest}\n")
 
 """
 Problem nº 4:
 """
 edges = [
-    ['w', 'y'],
-    ['x', 'y'],
-    ['z', 'y'],
-    ['z', 'v'],
-    ['w', 'v']
+  ['w', 'x'],
+  ['w', 'y'],
+  ['x', 'z'],
+  ['y', 'z'],
+  ['y', 'v'],
 ]
 
-graph = {}
-
-for edge in edges:
-    [a, b] = edge
-    if a not in graph: graph[a] = []
-    if b not in graph: graph[b] = []
-    
-    graph[a].append(b)
-    graph[b].append(a)
-
-def shortest_path(graph, source, dest):
-    visited = set()
-    
-    if source == dest:
-        return 0
-    
+def shortest_path(edges, source, dest):
     queue = deque([(source, 0)])
-    
-    while len(queue) > 0:
-        current = queue.popleft()
-        current_node = current[0]
+    visited = set([source])
+    graph = {}
+
+    for edge in edges:
+        [a, b] = edge
+        if a not in graph: graph[a] = []
+        if b not in graph: graph[b] = []
         
-        if current_node not in visited:
-            visited.add(current_node)
-            current_distance = current[1]
-            
-            for node in graph[current_node]:
-                if node == dest:
-                    return current_distance + 1
-                queue.append((node, current_distance + 1))
+        graph[a].append(b)
+        graph[b].append(a)
+    
+    while queue:
+        node, distance = queue.popleft()
+
+        if node == dest:
+            return distance
+        
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append((neighbor, distance+1))
     
     return -1
 
-shortest = shortest_path(graph, 'w', 'c')
-print(f"Shortest path: {shortest}")
+shortest = shortest_path(edges, 'w', 'a')
+print(f"Shortest path: {shortest}\n")
 
 """
 Problem nº 5:
@@ -234,7 +225,7 @@ def explore(grid, row, col, visited):
     return True
 
 island_num = island_count(grid)
-print(f"Number os islands: {island_num}")
+print(f"Number os islands: {island_num}\n")
 
 """
 Problem nº 6:
@@ -276,7 +267,13 @@ def explore(grid, row, col, visited):
     if grid[row][col] == 'W':
         return 0
     
-    return explore(grid, row+1, col, visited) + explore(grid, row-1, col, visited) + explore(grid, row, col+1, visited) + explore(grid, row, col-1, visited) + 1
+    return (
+        explore(grid, row+1, col, visited) + 
+        explore(grid, row-1, col, visited) + 
+        explore(grid, row, col+1, visited) + 
+        explore(grid, row, col-1, visited) + 
+        1
+    )
 
 slowest = slowest_island(grid)
 print(f"Slowest island: {slowest}")
