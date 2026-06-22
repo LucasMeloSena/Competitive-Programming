@@ -62,3 +62,9 @@ while True:
   except EOFError:
     break
 ```
+
+### Put 0s at left
+```python
+  num1 = num1.zfill(5)
+  num2 = num2.zfill(5)
+```
